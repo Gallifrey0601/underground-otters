@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hong Kong MTR Memory Game</title>
+    <meta name="description" content="Hong Kong MTR Memory Game - Test your knowledge of all 98 MTR stations">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Hong Kong MTR Memory Game</h1>
+            <div class="progress-info">
+                <span class="percentage">0.0%</span>
+                <span class="station-count">0/98 stations found</span>
+            </div>
+        </header>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <input 
+                type="text" 
+                id="stationInput" 
+                class="station-input" 
+                placeholder="Type station name..."
+                autocomplete="off"
+                spellcheck="false"
+            >
+            <button id="resetBtn" class="reset-btn">Reset</button>
+        </div>
+
+        <!-- Clean Hong Kong MTR Map -->
+        <div class="map-section">
+            <div class="map-container">
+                <svg class="mtr-map" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Clean white background -->
+                    <rect width="1000" height="600" fill="white"/>
+                    
+                    <!-- Island Line (Blue) - Hong Kong Island North Shore -->
+                    <g class="line-group" data-line="Island Line">
+                        <path d="M100 400 L750 400" stroke="#0073e6" stroke-width="4" class="line-path"/>
+                        
+                        <!-- Island Line Stations - Hidden by default -->
+                        <g class="station-marker" data-station="Kennedy Town">
+                            <circle cx="100" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="100" y="385" class="station-label">Kennedy Town</text>
+                        </g>
+                        <g class="station-marker" data-station="HKU">
+                            <circle cx="140" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="140" y="385" class="station-label">HKU</text>
+                        </g>
+                        <g class="station-marker" data-station="Sai Ying Pun">
+                            <circle cx="180" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="180" y="385" class="station-label">Sai Ying Pun</text>
+                        </g>
+                        <g class="station-marker" data-station="Sheung Wan">
+                            <circle cx="220" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="220" y="385" class="station-label">Sheung Wan</text>
+                        </g>
+                        <g class="station-marker" data-station="Central">
+                            <circle cx="280" cy="400" r="6" fill="#0073e6" opacity="0"/>
+                            <text x="280" y="385" class="station-label major">Central</text>
+                        </g>
+                        <g class="station-marker" data-station="Admiralty">
+                            <circle cx="320" cy="400" r="6" fill="#0073e6" opacity="0"/>
+                            <text x="320" y="385" class="station-label major">Admiralty</text>
+                        </g>
+                        <g class="station-marker" data-station="Wan Chai">
+                            <circle cx="360" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="360" y="385" class="station-label">Wan Chai</text>
+                        </g>
+                        <g class="station-marker" data-station="Causeway Bay">
+                            <circle cx="400" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="400" y="385" class="station-label">Causeway Bay</text>
+                        </g>
+                        <g class="station-marker" data-station="Tin Hau">
+                            <circle cx="440" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="440" y="385" class="station-label">Tin Hau</text>
+                        </g>
+                        <g class="station-marker" data-station="Fortress Hill">
+                            <circle cx="480" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="480" y="385" class="station-label">Fortress Hill</text>
+                        </g>
+                        <g class="station-marker" data-station="North Point">
+                            <circle cx="520" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="520" y="385" class="station-label">North Point</text>
+                        </g>
+                        <g class="station-marker" data-station="Quarry Bay">
+                            <circle cx="560" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="560" y="385" class="station-label">Quarry Bay</text>
+                        </g>
+                        <g class="station-marker" data-station="Tai Koo">
+                            <circle cx="600" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="600" y="415" class="station-label">Tai Koo</text>
+                        </g>
+                        <g class="station-marker" data-station="Sai Wan Ho">
+                            <circle cx="640" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="640" y="415" class="station-label">Sai Wan Ho</text>
+                        </g>
+                        <g class="station-marker" data-station="Shau Kei Wan">
+                            <circle cx="680" cy="400" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="680" y="415" class="station-label">Shau Kei Wan</text>
+                        </g>
+                        <g class="station-marker" data-station="Heng Fa Chuen">
+                            <circle cx="710" cy="420" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="710" y="440" class="station-label">Heng Fa Chuen</text>
+                        </g>
+                        <g class="station-marker" data-station="Chai Wan">
+                            <circle cx="750" cy="440" r="5" fill="#0073e6" opacity="0"/>
+                            <text x="750" y="460" class="station-label">Chai Wan</text>
+                        </g>
+                    </g>
+
+                    <!-- Tsuen Wan Line (Red) - Cross harbour northwest -->
+                    <g class="line-group" data-line="Tsuen Wan Line">
+                        <path d="M280 400 L280 300 L250 250 L100 150" stroke="#ff0000" stroke-width="4" class="line-path"/>
+                        
+                        <g class="station-marker" data-station="Tsim Sha Tsui">
+                            <circle cx="280" cy="340" r="6" fill="#ff0000" opacity="0"/>
+                            <text x="300" y="345" class="station-label major">Tsim Sha Tsui</text>
+                        </g>
+                        <g class="station-marker" data-station="Jordan">
+                            <circle cx="280" cy="320" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="300" y="325" class="station-label">Jordan</text>
+                        </g>
+                        <g class="station-marker" data-station="Yau Ma Tei">
+                            <circle cx="280" cy="300" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="300" y="305" class="station-label">Yau Ma Tei</text>
+                        </g>
+                        <g class="station-marker" data-station="Mong Kok">
+                            <circle cx="275" cy="285" r="6" fill="#ff0000" opacity="0"/>
+                            <text x="295" y="290" class="station-label major">Mong Kok</text>
+                        </g>
+                        <g class="station-marker" data-station="Prince Edward">
+                            <circle cx="270" cy="270" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="290" y="265" class="station-label">Prince Edward</text>
+                        </g>
+                        <g class="station-marker" data-station="Sham Shui Po">
+                            <circle cx="250" cy="250" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="250" y="235" class="station-label">Sham Shui Po</text>
+                        </g>
+                        <g class="station-marker" data-station="Cheung Sha Wan">
+                            <circle cx="220" cy="220" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="220" y="205" class="station-label">Cheung Sha Wan</text>
+                        </g>
+                        <g class="station-marker" data-station="Lai Chi Kok">
+                            <circle cx="190" cy="190" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="190" y="175" class="station-label">Lai Chi Kok</text>
+                        </g>
+                        <g class="station-marker" data-station="Mei Foo">
+                            <circle cx="160" cy="170" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="160" y="155" class="station-label">Mei Foo</text>
+                        </g>
+                        <g class="station-marker" data-station="Lai King">
+                            <circle cx="140" cy="160" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="140" y="145" class="station-label">Lai King</text>
+                        </g>
+                        <g class="station-marker" data-station="Kwai Fong">
+                            <circle cx="120" cy="155" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="80" y="155" class="station-label">Kwai Fong</text>
+                        </g>
+                        <g class="station-marker" data-station="Kwai Hing">
+                            <circle cx="110" cy="153" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="70" y="153" class="station-label">Kwai Hing</text>
+                        </g>
+                        <g class="station-marker" data-station="Tai Wo Hau">
+                            <circle cx="105" cy="152" r="5" fill="#ff0000" opacity="0"/>
+                            <text x="65" y="152" class="station-label">Tai Wo Hau</text>
+                        </g>
+                        <g class="station-marker" data-station="Tsuen Wan">
+                            <circle cx="100" cy="150" r="6" fill="#ff0000" opacity="0"/>
+                            <text x="60" y="155" class="station-label major">Tsuen Wan</text>
+                        </g>
+                    </g>
+
+                    <!-- Kwun Tong Line (Green) - Northeast diagonal -->
+                    <g class="line-group" data-line="Kwun Tong Line">
+                        <path d="M280 285 L350 280 L500 200 L650 150" stroke="#00a651" stroke-width="4" class="line-path"/>
+                        
+                        <g class="station-marker" data-station="Whampoa">
+                            <circle cx="260" cy="350" r="5" fill="#00a651" opacity="0"/>
+                            <text x="280" y="355" class="station-label">Whampoa</text>
+                        </g>
+                        <g class="station-marker" data-station="Ho Man Tin">
+                            <circle cx="290" cy="320" r="5" fill="#00a651" opacity="0"/>
+                            <text x="310" y="325" class="station-label">Ho Man Tin</text>
+                        </g>
+                        <g class="station-marker" data-station="Shek Kip Mei">
+                            <circle cx="300" cy="285" r="5" fill="#00a651" opacity="0"/>
+                            <text x="300" y="270" class="station-label">Shek Kip Mei</text>
+                        </g>
+                        <g class="station-marker" data-station="Kowloon Tong">
+                            <circle cx="330" cy="280" r="6" fill="#00a651" opacity="0"/>
+                            <text x="330" y="265" class="station-label major">Kowloon Tong</text>
+                        </g>
+                        <g class="station-marker" data-station="Lok Fu">
+                            <circle cx="360" cy="275" r="5" fill="#00a651" opacity="0"/>
+                            <text x="360" y="260" class="station-label">Lok Fu</text>
+                        </g>
+                        <g class="station-marker" data-station="Wong Tai Sin">
+                            <circle cx="390" cy="270" r="5" fill="#00a651" opacity="0"/>
+                            <text x="390" y="255" class="station-label">Wong Tai Sin</text>
+                        </g>
+                        <g class="station-marker" data-station="Diamond Hill">
+                            <circle cx="420" cy="260" r="5" fill="#00a651" opacity="0"/>
+                            <text x="420" y="245" class="station-label">Diamond Hill</text>
+                        </g>
+                        <g class="station-marker" data-station="Choi Hung">
+                            <circle cx="450" cy="240" r="5" fill="#00a651" opacity="0"/>
+                            <text x="450" y="225" class="station-label">Choi Hung</text>
+                        </g>
+                        <g class="station-marker" data-station="Kowloon Bay">
+                            <circle cx="480" cy="220" r="5" fill="#00a651" opacity="0"/>
+                            <text x="480" y="205" class="station-label">Kowloon Bay</text>
+                        </g>
+                        <g class="station-marker" data-station="Ngau Tau Kok">
+                            <circle cx="520" cy="190" r="5" fill="#00a651" opacity="0"/>
+                            <text x="520" y="175" class="station-label">Ngau Tau Kok</text>
+                        </g>
+                        <g class="station-marker" data-station="Kwun Tong">
+                            <circle cx="560" cy="170" r="6" fill="#00a651" opacity="0"/>
+                            <text x="560" y="155" class="station-label major">Kwun Tong</text>
+                        </g>
+                        <g class="station-marker" data-station="Lam Tin">
+                            <circle cx="600" cy="160" r="5" fill="#00a651" opacity="0"/>
+                            <text x="600" y="145" class="station-label">Lam Tin</text>
+                        </g>
+                        <g class="station-marker" data-station="Yau Tong">
+                            <circle cx="620" cy="155" r="5" fill="#00a651" opacity="0"/>
+                            <text x="620" y="140" class="station-label">Yau Tong</text>
+                        </g>
+                        <g class="station-marker" data-station="Tiu Keng Leng">
+                            <circle cx="650" cy="150" r="5" fill="#00a651" opacity="0"/>
+                            <text x="650" y="135" class="station-label">Tiu Keng Leng</text>
+                        </g>
+                    </g>
+
+                    <!-- Tseung Kwan O Line (Purple) -->
+                    <g class="line-group" data-line="Tseung Kwan O Line">
+                        <path d="M520 400 L650 150 L800 100" stroke="#8e4ec6" stroke-width="4" class="line-path"/>
+                        
+                        <g class="station-marker" data-station="Tseung Kwan O">
+                            <circle cx="720" cy="120" r="6" fill="#8e4ec6" opacity="0"/>
+                            <text x="720" y="105" class="station-label major">Tseung Kwan O</text>
+                        </g>
+                        <g class="station-marker" data-station="Hang Hau">
+                            <circle cx="750" cy="110" r="5" fill="#8e4ec6" opacity="0"/>
+                            <text x="750" y="95" class="station-label">Hang Hau</text>
+                        </g>
+                        <g class="station-marker" data-station="Po Lam">
+                            <circle cx="775" cy="105" r="5" fill="#8e4ec6" opacity="0"/>
+                            <text x="775" y="90" class="station-label">Po Lam</text>
+                        </g>
+                        <g class="station-marker" data-station="LOHAS Park">
+                            <circle cx="800" cy="100" r="5" fill="#8e4ec6" opacity="0"/>
+                            <text x="800" y="85" class="station-label">LOHAS Park</text>
+                        </g>
+                    </g>
+
+                    <!-- Tung Chung Line (Orange) - To Lantau -->
+                    <g class="line-group" data-line="Tung Chung Line">
+                        <path d="M280 400 L250 450 L150 500 L80 530" stroke="#ff9500" stroke-width="4" class="line-path"/>
+                        
+                        <g class="station-marker" data-station="Hong Kong">
+                            <circle cx="280" cy="420" r="6" fill="#ff9500" opacity="0"/>
+                            <text x="300" y="425" class="station-label major">Hong Kong</text>
+                        </g>
+                        <g class="station-marker" data-station="Kowloon">
+                            <circle cx="260" cy="430" r="6" fill="#ff9500" opacity="0"/>
+                            <text x="220" y="435" class="station-label major">Kowloon</text>
+                        </g>
+                        <g class="station-marker" data-station="Olympic">
+                            <circle cx="240" cy="440" r="5" fill="#ff9500" opacity="0"/>
+                            <text x="200" y="445" class="station-label">Olympic</text>
+                        </g>
+                        <g class="station-marker" data-station="Nam Cheong">
+                            <circle cx="200" cy="470" r="5" fill="#ff9500" opacity="0"/>
+                            <text x="160" y="475" class="station-label">Nam Cheong</text>
+                        </g>
+                        <g class="station-marker" data-station="Tsing Yi">
+                            <circle cx="150" cy="500" r="6" fill="#ff9500" opacity="0"/>
+                            <text x="110" y="505" class="station-label major">Tsing Yi</text>
+                        </g>
+                        <g class="station-marker" data-station="Sunny Bay">
+                            <circle cx="110" cy="515" r="5" fill="#ff9500" opacity="0"/>
+                            <text x="70" y="520" class="station-label">Sunny Bay</text>
+                        </g>
+                        <g class="station-marker" data-station="Tung Chung">
+                            <circle cx="80" cy="530" r="6" fill="#ff9500" opacity="0"/>
+                            <text x="40" y="535" class="station-label major">Tung Chung</text>
+                        </g>
+                    </g>
+
+                    <!-- Airport Express (Teal) -->
+                    <g class="line-group" data-line="Airport Express">
+                        <path d="M280 400 L150 500 L50 550" stroke="#00b7a7" stroke-width="3" class="line-path"/>
+                        
+                        <g class="station-marker" data-station="Airport">
+                            <circle cx="70" cy="540" r="6" fill="#00b7a7" opacity="0"/>
+                            <text x="30" y="545" class="station-label major">Airport</text>
+                        </g>
+                        <g class="station-marker" data-station="AsiaWorld-Expo">
+                            <circle cx="50" cy="550" r="5" fill="#00b7a7" opacity="0"/>
+                            <text x="55" y="565" class="station-label">AsiaWorld-Expo</text>
+                        </g>
+                    </g>
+
+                    <!-- East Rail Line (Light Blue) - North through NT -->
+                    <g class="line-group" data-line="East Rail Line">
+                        <path d="M320 400 L340 380 L360 300 L400 150 L450 50" stroke="#5ac4e8" stroke-width="4" class="line-path"/>
+                        
+                        <g class="station-marker" data-station="Exhibition Centre">
+                            <circle cx="330" cy="390" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="350" y="395" class="station-label">Exhibition Centre</text>
+                        </g>
+                        <g class="station-marker" data-station="Hung Hom">
+                            <circle cx="340" cy="370" r="6" fill="#5ac4e8" opacity="0"/>
+                            <text x="360" y="375" class="station-label major">Hung Hom</text>
+                        </g>
+                        <g class="station-marker" data-station="Mong Kok East">
+                            <circle cx="350" cy="330" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="370" y="335" class="station-label">Mong Kok East</text>
+                        </g>
+                        <g class="station-marker" data-station="Tai Wai">
+                            <circle cx="360" cy="280" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="380" y="285" class="station-label">Tai Wai</text>
+                        </g>
+                        <g class="station-marker" data-station="Sha Tin">
+                            <circle cx="370" cy="240" r="6" fill="#5ac4e8" opacity="0"/>
+                            <text x="390" y="245" class="station-label major">Sha Tin</text>
+                        </g>
+                        <g class="station-marker" data-station="Fo Tan">
+                            <circle cx="380" cy="200" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="400" y="205" class="station-label">Fo Tan</text>
+                        </g>
+                        <g class="station-marker" data-station="Racecourse">
+                            <circle cx="385" cy="180" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="405" y="185" class="station-label">Racecourse</text>
+                        </g>
+                        <g class="station-marker" data-station="University">
+                            <circle cx="390" cy="160" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="410" y="165" class="station-label">University</text>
+                        </g>
+                        <g class="station-marker" data-station="Tai Po Market">
+                            <circle cx="395" cy="140" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="415" y="145" class="station-label">Tai Po Market</text>
+                        </g>
+                        <g class="station-marker" data-station="Tai Wo">
+                            <circle cx="410" cy="100" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="430" y="105" class="station-label">Tai Wo</text>
+                        </g>
+                        <g class="station-marker" data-station="Fanling">
+                            <circle cx="430" cy="70" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="450" y="75" class="station-label">Fanling</text>
+                        </g>
+                        <g class="station-marker" data-station="Sheung Shui">
+                            <circle cx="440" cy="60" r="6" fill="#5ac4e8" opacity="0"/>
+                            <text x="460" y="65" class="station-label major">Sheung Shui</text>
+                        </g>
+                        <g class="station-marker" data-station="Lo Wu">
+                            <circle cx="450" cy="50" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="470" y="55" class="station-label">Lo Wu</text>
+                        </g>
+                        <g class="station-marker" data-station="Lok Ma Chau">
+                            <circle cx="420" cy="40" r="5" fill="#5ac4e8" opacity="0"/>
+                            <text x="380" y="45" class="station-label">Lok Ma Chau</text>
+                        </g>
+                    </g>
+
+                    <!-- Tuen Ma Line (Brown) - Long cross-territory line -->
+                    <g class="line-group" data-line="Tuen Ma Line">
+                        <path d="M50 100 L160 170 L240 440 L340 370 L500 200 L700 120" stroke="#8d5524" stroke-width="4" class="line-path"/>
+                        
+                        <!-- Western section -->
+                        <g class="station-marker" data-station="Tuen Mun">
+                            <circle cx="50" cy="100" r="6" fill="#8d5524" opacity="0"/>
+                            <text x="10" y="105" class="station-label major">Tuen Mun</text>
+                        </g>
+                        <g class="station-marker" data-station="Siu Hong">
+                            <circle cx="70" cy="110" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="30" y="115" class="station-label">Siu Hong</text>
+                        </g>
+                        <g class="station-marker" data-station="Tin Shui Wai">
+                            <circle cx="90" cy="120" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="50" y="125" class="station-label">Tin Shui Wai</text>
+                        </g>
+                        <g class="station-marker" data-station="Long Ping">
+                            <circle cx="110" cy="135" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="70" y="140" class="station-label">Long Ping</text>
+                        </g>
+                        <g class="station-marker" data-station="Yuen Long">
+                            <circle cx="130" cy="150" r="6" fill="#8d5524" opacity="0"/>
+                            <text x="90" y="155" class="station-label major">Yuen Long</text>
+                        </g>
+                        <g class="station-marker" data-station="Kam Sheung Road">
+                            <circle cx="145" cy="160" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="105" y="165" class="station-label">Kam Sheung Road</text>
+                        </g>
+                        <g class="station-marker" data-station="Tsuen Wan West">
+                            <circle cx="160" cy="170" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="120" y="175" class="station-label">Tsuen Wan West</text>
+                        </g>
+                        
+                        <!-- Central section -->
+                        <g class="station-marker" data-station="Austin">
+                            <circle cx="250" cy="380" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="270" y="385" class="station-label">Austin</text>
+                        </g>
+                        <g class="station-marker" data-station="East Tsim Sha Tsui">
+                            <circle cx="300" cy="360" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="320" y="365" class="station-label">East TST</text>
+                        </g>
+                        <g class="station-marker" data-station="To Kwa Wan">
+                            <circle cx="350" cy="340" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="370" y="345" class="station-label">To Kwa Wan</text>
+                        </g>
+                        <g class="station-marker" data-station="Sung Wong Toi">
+                            <circle cx="380" cy="320" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="400" y="325" class="station-label">Sung Wong Toi</text>
+                        </g>
+                        <g class="station-marker" data-station="Kai Tak">
+                            <circle cx="420" cy="280" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="440" y="285" class="station-label">Kai Tak</text>
+                        </g>
+                        <g class="station-marker" data-station="Hin Keng">
+                            <circle cx="460" cy="240" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="480" y="245" class="station-label">Hin Keng</text>
+                        </g>
+                        
+                        <!-- Eastern section -->
+                        <g class="station-marker" data-station="Che Kung Temple">
+                            <circle cx="520" cy="200" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="540" y="205" class="station-label">Che Kung Temple</text>
+                        </g>
+                        <g class="station-marker" data-station="Sha Tin Wai">
+                            <circle cx="540" cy="190" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="560" y="195" class="station-label">Sha Tin Wai</text>
+                        </g>
+                        <g class="station-marker" data-station="City One">
+                            <circle cx="580" cy="170" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="600" y="175" class="station-label">City One</text>
+                        </g>
+                        <g class="station-marker" data-station="Shek Mun">
+                            <circle cx="600" cy="160" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="620" y="165" class="station-label">Shek Mun</text>
+                        </g>
+                        <g class="station-marker" data-station="Tai Shui Hang">
+                            <circle cx="630" cy="145" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="650" y="150" class="station-label">Tai Shui Hang</text>
+                        </g>
+                        <g class="station-marker" data-station="Heng On">
+                            <circle cx="660" cy="130" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="680" y="135" class="station-label">Heng On</text>
+                        </g>
+                        <g class="station-marker" data-station="Ma On Shan">
+                            <circle cx="680" cy="125" r="6" fill="#8d5524" opacity="0"/>
+                            <text x="700" y="130" class="station-label major">Ma On Shan</text>
+                        </g>
+                        <g class="station-marker" data-station="Wu Kai Sha">
+                            <circle cx="700" cy="120" r="5" fill="#8d5524" opacity="0"/>
+                            <text x="720" y="125" class="station-label">Wu Kai Sha</text>
+                        </g>
+                    </g>
+
+                    <!-- South Island Line (Yellow) -->
+                    <g class="line-group" data-line="South Island Line">
+                        <path d="M320 400 L350 480" stroke="#ffda00" stroke-width="3" class="line-path"/>
+                        
+                        <g class="station-marker" data-station="Ocean Park">
+                            <circle cx="325" cy="420" r="5" fill="#ffda00" opacity="0"/>
+                            <text x="345" y="425" class="station-label">Ocean Park</text>
+                        </g>
+                        <g class="station-marker" data-station="Wong Chuk Hang">
+                            <circle cx="335" cy="440" r="5" fill="#ffda00" opacity="0"/>
+                            <text x="355" y="445" class="station-label">Wong Chuk Hang</text>
+                        </g>
+                        <g class="station-marker" data-station="Lei Tung">
+                            <circle cx="340" cy="460" r="5" fill="#ffda00" opacity="0"/>
+                            <text x="360" y="465" class="station-label">Lei Tung</text>
+                        </g>
+                        <g class="station-marker" data-station="South Horizons">
+                            <circle cx="350" cy="480" r="5" fill="#ffda00" opacity="0"/>
+                            <text x="370" y="485" class="station-label">South Horizons</text>
+                        </g>
+                    </g>
+
+                    <!-- Disneyland Resort Line (Pink) -->
+                    <g class="line-group" data-line="Disneyland Resort Line">
+                        <path d="M110 515 L90 560" stroke="#ff69b4" stroke-width="3" class="line-path"/>
+                        
+                        <g class="station-marker" data-station="Disneyland Resort">
+                            <circle cx="90" cy="560" r="6" fill="#ff69b4" opacity="0"/>
+                            <text x="95" y="575" class="station-label major">Disneyland Resort</text>
+                        </g>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Toggle for detailed station lists -->
+        <div class="details-section">
+            <button class="toggle-details" onclick="toggleDetails()">📋 Show Station Lists</button>
+            <div class="station-lists hidden" id="stationLists">
+                <div class="lines-grid">
+                    <!-- Station lists populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
