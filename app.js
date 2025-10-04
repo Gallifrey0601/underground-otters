@@ -1,4 +1,4 @@
-// Hong Kong MTR Memory Game Logic with Interactive Map
+// Hong Kong MTR Memory Game - Interactive Map Version
 class MTRMemoryGame {
     constructor() {
         this.totalStations = 98;
@@ -7,14 +7,9 @@ class MTRMemoryGame {
         this.resetBtn = document.getElementById('resetBtn');
         this.percentageDisplay = document.querySelector('.percentage');
         this.stationCountDisplay = document.querySelector('.station-count');
-        this.progressFill = document.querySelector('.progress-fill');
-        this.progressCircle = document.querySelector('.progress-circle');
-        this.foundIndicator = document.querySelector('.found-count');
-        this.foundIndicatorDetail = document.querySelector('.found-count-detail');
         
         // Complete MTR Station Data with Alternative Names
         this.stationData = {
-            // Exact station names
             'Kennedy Town': ['Kennedy Town', 'kennedy town'],
             'HKU': ['HKU', 'hku', 'University of Hong Kong', 'Hong Kong University'],
             'Sai Ying Pun': ['Sai Ying Pun', 'sai ying pun'],
@@ -123,17 +118,18 @@ class MTRMemoryGame {
             });
         });
 
-        this.lineStationCounts = {
-            'Island Line': 17,
-            'Kwun Tong Line': 17,
-            'Tsuen Wan Line': 16,
-            'Tseung Kwan O Line': 8,
-            'Tung Chung Line': 8,
-            'Airport Express': 5,
-            'East Rail Line': 16,
-            'Tuen Ma Line': 27,
-            'South Island Line': 5,
-            'Disneyland Resort Line': 2
+        // Line data for completion tracking
+        this.lineData = {
+            'Island Line': ['Kennedy Town', 'HKU', 'Sai Ying Pun', 'Sheung Wan', 'Central', 'Admiralty', 'Wan Chai', 'Causeway Bay', 'Tin Hau', 'Fortress Hill', 'North Point', 'Quarry Bay', 'Tai Koo', 'Sai Wan Ho', 'Shau Kei Wan', 'Heng Fa Chuen', 'Chai Wan'],
+            'Kwun Tong Line': ['Whampoa', 'Ho Man Tin', 'Yau Ma Tei', 'Mong Kok', 'Prince Edward', 'Shek Kip Mei', 'Kowloon Tong', 'Lok Fu', 'Wong Tai Sin', 'Diamond Hill', 'Choi Hung', 'Kowloon Bay', 'Ngau Tau Kok', 'Kwun Tong', 'Lam Tin', 'Yau Tong', 'Tiu Keng Leng'],
+            'Tsuen Wan Line': ['Central', 'Admiralty', 'Tsim Sha Tsui', 'Jordan', 'Yau Ma Tei', 'Mong Kok', 'Prince Edward', 'Sham Shui Po', 'Cheung Sha Wan', 'Lai Chi Kok', 'Mei Foo', 'Lai King', 'Kwai Fong', 'Kwai Hing', 'Tai Wo Hau', 'Tsuen Wan'],
+            'Tseung Kwan O Line': ['North Point', 'Quarry Bay', 'Yau Tong', 'Tiu Keng Leng', 'Tseung Kwan O', 'Hang Hau', 'Po Lam', 'LOHAS Park'],
+            'Tung Chung Line': ['Hong Kong', 'Kowloon', 'Olympic', 'Nam Cheong', 'Lai King', 'Tsing Yi', 'Sunny Bay', 'Tung Chung'],
+            'Airport Express': ['Hong Kong', 'Kowloon', 'Tsing Yi', 'Airport', 'AsiaWorld-Expo'],
+            'East Rail Line': ['Admiralty', 'Exhibition Centre', 'Hung Hom', 'Mong Kok East', 'Kowloon Tong', 'Tai Wai', 'Sha Tin', 'Fo Tan', 'Racecourse', 'University', 'Tai Po Market', 'Tai Wo', 'Fanling', 'Sheung Shui', 'Lo Wu', 'Lok Ma Chau'],
+            'Tuen Ma Line': ['Tuen Mun', 'Siu Hong', 'Tin Shui Wai', 'Long Ping', 'Yuen Long', 'Kam Sheung Road', 'Tsuen Wan West', 'Mei Foo', 'Nam Cheong', 'Austin', 'East Tsim Sha Tsui', 'Hung Hom', 'Ho Man Tin', 'To Kwa Wan', 'Sung Wong Toi', 'Kai Tak', 'Diamond Hill', 'Hin Keng', 'Tai Wai', 'Che Kung Temple', 'Sha Tin Wai', 'City One', 'Shek Mun', 'Tai Shui Hang', 'Heng On', 'Ma On Shan', 'Wu Kai Sha'],
+            'South Island Line': ['Admiralty', 'Ocean Park', 'Wong Chuk Hang', 'Lei Tung', 'South Horizons'],
+            'Disneyland Resort Line': ['Sunny Bay', 'Disneyland Resort']
         };
 
         this.init();
@@ -142,16 +138,16 @@ class MTRMemoryGame {
     init() {
         this.setupEventListeners();
         this.updateDisplay();
+        this.generateStationLists();
         this.stationInput.focus();
         
-        // Load saved progress if available
-        this.loadProgress();
-        
-        // Add hover effects to map stations
-        this.setupMapInteractions();
+        console.log('🚇 Hong Kong MTR Memory Game loaded!');
+        console.log('🗺️ Interactive map ready - type station names to see them appear!');
+        console.log('💡 Try: Central, TST, Airport, HKU, Tseung Kwan O');
     }
 
     setupEventListeners() {
+        // Input handling
         this.stationInput.addEventListener('input', (e) => {
             this.handleInput(e.target.value);
         });
@@ -162,54 +158,17 @@ class MTRMemoryGame {
             }
         });
 
+        // Reset button
         this.resetBtn.addEventListener('click', () => {
             this.resetGame();
         });
 
-        // Allow keyboard shortcut for reset
+        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.key === 'r') {
                 e.preventDefault();
                 this.resetGame();
             }
-        });
-    }
-
-    setupMapInteractions() {
-        // Add subtle hover effects to map stations
-        const mapStations = document.querySelectorAll('.map-station');
-        mapStations.forEach(station => {
-            station.addEventListener('mouseenter', (e) => {
-                if (!station.classList.contains('found')) return;
-                
-                const circle = station.querySelector('circle');
-                const text = station.querySelector('.station-text');
-                
-                if (circle) {
-                    circle.style.transform = 'scale(1.2)';
-                    circle.style.filter = 'drop-shadow(0 4px 8px rgba(46, 204, 113, 0.5))';
-                }
-                if (text) {
-                    text.style.fontSize = '13px';
-                    text.style.fontWeight = '700';
-                }
-            });
-
-            station.addEventListener('mouseleave', (e) => {
-                if (!station.classList.contains('found')) return;
-                
-                const circle = station.querySelector('circle');
-                const text = station.querySelector('.station-text');
-                
-                if (circle) {
-                    circle.style.transform = 'scale(1)';
-                    circle.style.filter = 'drop-shadow(0 2px 4px rgba(46, 204, 113, 0.3))';
-                }
-                if (text) {
-                    text.style.fontSize = text.classList.contains('major') ? '12px' : '11px';
-                    text.style.fontWeight = text.classList.contains('major') ? '700' : '600';
-                }
-            });
         });
     }
 
@@ -223,86 +182,92 @@ class MTRMemoryGame {
         if (stationName && !this.foundStations.has(stationName)) {
             this.foundStation(stationName);
             this.stationInput.value = '';
+            this.stationInput.focus();
         }
     }
 
     foundStation(stationName) {
         this.foundStations.add(stationName);
         
-        // Visual feedback for both map and list
-        this.markStationFoundOnMap(stationName);
-        this.markStationFoundInList(stationName);
-        this.updateDisplay();
-        this.updateLineProgress(stationName);
-        this.saveProgress();
+        // Show station on map
+        this.showStationOnMap(stationName);
         
-        // Play sound effect (if available)
+        // Update displays
+        this.updateDisplay();
+        this.updateStationLists(stationName);
+        
+        // Check line completion
+        this.checkLineCompletion(stationName);
+        
+        // Play sound
         this.playFoundSound();
         
-        // Check for completion
+        // Check game completion
         if (this.foundStations.size === this.totalStations) {
             this.celebrateCompletion();
         }
     }
 
-    markStationFoundOnMap(stationName) {
-        // Show station on the interactive map
-        const mapStations = document.querySelectorAll(`.map-station[data-station="${stationName}"]`);
-        mapStations.forEach(mapStation => {
-            mapStation.classList.remove('hidden');
-            mapStation.classList.add('found');
+    showStationOnMap(stationName) {
+        // Find all station markers with this name
+        const stationMarkers = document.querySelectorAll(`[data-station="${stationName}"]`);
+        
+        stationMarkers.forEach(marker => {
+            marker.classList.add('found');
             
-            // Add a small celebration animation
-            setTimeout(() => {
-                const circle = mapStation.querySelector('circle');
-                if (circle) {
-                    circle.style.transform = 'scale(1.3)';
-                    setTimeout(() => {
-                        circle.style.transform = 'scale(1)';
-                    }, 300);
-                }
-            }, 100);
-        });
-    }
-
-    markStationFoundInList(stationName) {
-        // Show station in the detailed lists
-        const listStations = document.querySelectorAll(`.station[data-station="${stationName}"]`);
-        listStations.forEach(element => {
-            element.classList.add('found');
+            // Show the station label
+            const label = marker.querySelector('.station-label');
+            if (label) {
+                label.classList.remove('hidden');
+            }
             
-            // Add a small celebration animation
-            setTimeout(() => {
-                element.style.transform = 'scale(1.15)';
+            // Add entrance animation
+            const circle = marker.querySelector('circle');
+            if (circle) {
+                // Trigger animation by temporarily changing size
+                const originalR = circle.getAttribute('r');
+                circle.setAttribute('r', '8');
                 setTimeout(() => {
-                    element.style.transform = 'scale(1.05)';
-                }, 200);
-            }, 50);
+                    circle.setAttribute('r', '6');
+                }, 300);
+            }
         });
     }
 
-    updateLineProgress(stationName) {
-        const stationElement = document.querySelector(`[data-station="${stationName}"]`);
-        if (!stationElement) return;
-        
-        const lineName = stationElement.getAttribute('data-line');
-        const lineSection = document.querySelector(`[data-line="${lineName}"]`);
-        
-        if (lineSection) {
-            const foundInLine = Array.from(lineSection.querySelectorAll('.station.found')).length;
-            const totalInLine = this.lineStationCounts[lineName];
-            const progressElement = lineSection.querySelector('.line-progress');
-            
-            if (progressElement) {
-                progressElement.textContent = `${foundInLine}/${totalInLine}`;
+    checkLineCompletion(stationName) {
+        // Find which lines this station belongs to
+        Object.keys(this.lineData).forEach(lineName => {
+            if (this.lineData[lineName].includes(stationName)) {
+                const lineStations = this.lineData[lineName];
+                const foundInLine = lineStations.filter(station => this.foundStations.has(station));
                 
-                // Check if line is completed
-                if (foundInLine === totalInLine) {
-                    lineSection.classList.add('completed');
+                if (foundInLine.length === lineStations.length) {
                     this.celebrateLineCompletion(lineName);
                 }
             }
-        }
+        });
+    }
+
+    celebrateLineCompletion(lineName) {
+        // Find the line group and add completion effect
+        const lineGroups = document.querySelectorAll('.line-group');
+        // Note: We'd need to add data-line attributes to properly identify lines
+        
+        // Show notification
+        this.showNotification(`🎉 ${lineName} Complete!`);
+        
+        console.log(`🎊 Line completed: ${lineName}`);
+    }
+
+    showNotification(message) {
+        const notification = document.createElement('div');
+        notification.className = 'line-notification';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
     }
 
     updateDisplay() {
@@ -312,93 +277,95 @@ class MTRMemoryGame {
         this.percentageDisplay.textContent = `${percentage}%`;
         this.stationCountDisplay.textContent = `${foundCount}/${this.totalStations} stations found`;
         
-        // Update both found indicators
-        if (this.foundIndicator) {
-            this.foundIndicator.textContent = foundCount;
-        }
-        if (this.foundIndicatorDetail) {
-            this.foundIndicatorDetail.textContent = foundCount;
-        }
-        
-        // Update progress bar
-        this.progressFill.style.width = `${percentage}%`;
-        
-        // Update progress circle
-        const degrees = (foundCount / this.totalStations) * 360;
-        this.progressCircle.style.background = `conic-gradient(#3498db ${degrees}deg, #ecf0f1 ${degrees}deg)`;
-        
         // Update page title
         document.title = `${percentage}% - Hong Kong MTR Memory Game`;
     }
 
-    celebrateLineCompletion(lineName) {
-        // Create a temporary celebration message
-        const celebration = document.createElement('div');
-        celebration.className = 'line-celebration';
-        celebration.innerHTML = `🎉 ${lineName} Complete! 🎉`;
+    generateStationLists() {
+        const stationLists = document.getElementById('stationLists');
+        if (!stationLists) return;
         
-        document.body.appendChild(celebration);
+        const linesGrid = stationLists.querySelector('.lines-grid');
+        if (!linesGrid) return;
         
-        setTimeout(() => {
-            celebration.remove();
-        }, 3000);
+        const lineColors = {
+            'Island Line': '#0073e6',
+            'Kwun Tong Line': '#00a651',
+            'Tsuen Wan Line': '#ff0000',
+            'Tseung Kwan O Line': '#8e4ec6',
+            'Tung Chung Line': '#ff9500',
+            'Airport Express': '#00b7a7',
+            'East Rail Line': '#5ac4e8',
+            'Tuen Ma Line': '#8d5524',
+            'South Island Line': '#ffda00',
+            'Disneyland Resort Line': '#ff69b4'
+        };
+        
+        Object.keys(this.lineData).forEach(lineName => {
+            const lineSection = document.createElement('div');
+            lineSection.className = 'line-section';
+            lineSection.innerHTML = `
+                <div class="line-header">
+                    <div class="line-color" style="background-color: ${lineColors[lineName]};"></div>
+                    <span class="line-name">${lineName}</span>
+                    <span class="line-progress">0/${this.lineData[lineName].length}</span>
+                </div>
+                <div class="stations-grid">
+                    ${this.lineData[lineName].map(station => 
+                        `<div class="station-item" data-station="${station}">${station}</div>`
+                    ).join('')}
+                </div>
+            `;
+            linesGrid.appendChild(lineSection);
+        });
+    }
 
-        // Add visual celebration to the map line
-        const mapLineGroup = document.querySelector(`.line-group[data-line="${lineName}"]`);
-        if (mapLineGroup) {
-            const linePath = mapLineGroup.querySelector('.line-path');
-            if (linePath) {
-                linePath.style.strokeWidth = '12';
-                linePath.style.filter = 'drop-shadow(0 0 10px currentColor)';
-                
-                setTimeout(() => {
-                    linePath.style.strokeWidth = '8';
-                    linePath.style.filter = 'none';
-                }, 2000);
+    updateStationLists(stationName) {
+        const stationItems = document.querySelectorAll(`[data-station="${stationName}"].station-item`);
+        stationItems.forEach(item => {
+            item.classList.add('found');
+        });
+        
+        // Update line progress counters
+        Object.keys(this.lineData).forEach(lineName => {
+            if (this.lineData[lineName].includes(stationName)) {
+                const lineSection = document.querySelector('.line-section');
+                if (lineSection) {
+                    const foundInLine = this.lineData[lineName].filter(station => this.foundStations.has(station)).length;
+                    const progressElement = lineSection.querySelector('.line-progress');
+                    if (progressElement) {
+                        progressElement.textContent = `${foundInLine}/${this.lineData[lineName].length}`;
+                    }
+                }
             }
-        }
+        });
     }
 
     celebrateCompletion() {
-        // Full game completion celebration
         const celebration = document.createElement('div');
         celebration.className = 'celebration';
         celebration.innerHTML = `
             <div class="celebration-content">
                 <div>🎉 CONGRATULATIONS! 🎉</div>
-                <div style="font-size: 2rem; margin-top: 20px;">
-                    You named all 98 MTR stations!
+                <div style="font-size: 1.8rem; margin-top: 15px;">
+                    You found all 98 MTR stations!
                 </div>
-                <div style="font-size: 1.5rem; margin-top: 20px;">
-                    You're a true Hong Kong MTR expert! 🚇
+                <div style="font-size: 1.2rem; margin-top: 15px;">
+                    You're a Hong Kong transit expert! 🚇
                 </div>
             </div>
         `;
         
         document.body.appendChild(celebration);
         
-        // Make all map lines glow
-        const allLinePaths = document.querySelectorAll('.line-path');
-        allLinePaths.forEach(path => {
-            path.style.filter = 'drop-shadow(0 0 15px currentColor)';
-            path.style.strokeWidth = '12';
-        });
-        
         setTimeout(() => {
             celebration.remove();
-            // Reset line styles
-            allLinePaths.forEach(path => {
-                path.style.filter = 'none';
-                path.style.strokeWidth = '8';
-            });
         }, 4000);
         
-        // Update page title
         document.title = '🎉 100% Complete - Hong Kong MTR Memory Game';
     }
 
     playFoundSound() {
-        // Simple audio feedback using Web Audio API
         try {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = audioContext.createOscillator();
@@ -408,7 +375,7 @@ class MTRMemoryGame {
             gainNode.connect(audioContext.destination);
             
             oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+            oscillator.frequency.exponentialRampToValueAtTime(1000, audioContext.currentTime + 0.1);
             
             gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
             gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
@@ -416,165 +383,84 @@ class MTRMemoryGame {
             oscillator.start(audioContext.currentTime);
             oscillator.stop(audioContext.currentTime + 0.1);
         } catch (e) {
-            // Audio not supported or blocked
+            // Audio not supported
         }
     }
 
     resetGame() {
-        // Confirm reset if significant progress
-        if (this.foundStations.size > 10) {
-            if (!confirm(`Are you sure you want to reset? You'll lose your progress of ${this.foundStations.size} stations.`)) {
+        if (this.foundStations.size > 5) {
+            if (!confirm(`Reset and lose progress of ${this.foundStations.size} stations?`)) {
                 return;
             }
         }
         
         this.foundStations.clear();
         
-        // Reset map visual state
-        document.querySelectorAll('.map-station.found').forEach(station => {
-            station.classList.remove('found');
-            station.classList.add('hidden');
-            
-            // Reset any transforms
-            const circle = station.querySelector('circle');
+        // Reset map stations
+        document.querySelectorAll('.station-marker.found').forEach(marker => {
+            marker.classList.remove('found');
+            const label = marker.querySelector('.station-label');
+            if (label) {
+                label.classList.add('hidden');
+            }
+            const circle = marker.querySelector('circle');
             if (circle) {
-                circle.style.transform = '';
-                circle.style.filter = '';
-            }
-            const text = station.querySelector('.station-text');
-            if (text) {
-                text.style.fontSize = '';
-                text.style.fontWeight = '';
+                circle.setAttribute('r', '4');
             }
         });
         
-        // Reset list visual state
-        document.querySelectorAll('.station.found').forEach(station => {
-            station.classList.remove('found');
-            station.style.transform = '';
+        // Reset station lists
+        document.querySelectorAll('.station-item.found').forEach(item => {
+            item.classList.remove('found');
         });
         
-        document.querySelectorAll('.line-section.completed').forEach(section => {
-            section.classList.remove('completed');
-        });
-        
-        // Reset line progress displays
-        Object.keys(this.lineStationCounts).forEach(lineName => {
-            const lineSection = document.querySelector(`[data-line="${lineName}"]`);
-            if (lineSection) {
-                const progressElement = lineSection.querySelector('.line-progress');
-                if (progressElement) {
-                    progressElement.textContent = `0/${this.lineStationCounts[lineName]}`;
-                }
-            }
-        });
-
-        // Reset map line styles
-        document.querySelectorAll('.line-path').forEach(path => {
-            path.style.strokeWidth = '';
-            path.style.filter = '';
+        // Reset line progress
+        document.querySelectorAll('.line-progress').forEach(progress => {
+            const lineLength = progress.textContent.split('/')[1];
+            progress.textContent = `0/${lineLength}`;
         });
         
         this.updateDisplay();
         this.stationInput.value = '';
         this.stationInput.focus();
-        this.clearSavedProgress();
         
-        // Reset page title
         document.title = 'Hong Kong MTR Memory Game';
-    }
-
-    saveProgress() {
-        try {
-            // Since we can't use localStorage in the sandbox,
-            // we'll store progress in a global variable
-            window.mtrGameProgress = Array.from(this.foundStations);
-        } catch (e) {
-            // Storage not available
-        }
-    }
-
-    loadProgress() {
-        try {
-            if (window.mtrGameProgress && Array.isArray(window.mtrGameProgress)) {
-                window.mtrGameProgress.forEach(station => {
-                    this.foundStations.add(station);
-                    this.markStationFoundOnMap(station);
-                    this.markStationFoundInList(station);
-                    this.updateLineProgress(station);
-                });
-                this.updateDisplay();
-            }
-        } catch (e) {
-            // Storage not available
-        }
-    }
-
-    clearSavedProgress() {
-        try {
-            delete window.mtrGameProgress;
-        } catch (e) {
-            // Storage not available
-        }
     }
 }
 
-// Initialize the game when the page loads
+// Toggle details function
+function toggleDetails() {
+    const stationLists = document.getElementById('stationLists');
+    const toggleBtn = document.querySelector('.toggle-details');
+    
+    if (stationLists.classList.contains('hidden')) {
+        stationLists.classList.remove('hidden');
+        toggleBtn.textContent = '📋 Hide Station Lists';
+    } else {
+        stationLists.classList.add('hidden');
+        toggleBtn.textContent = '📋 Show Station Lists';
+    }
+}
+
+// Initialize game when page loads
 document.addEventListener('DOMContentLoaded', () => {
     const game = new MTRMemoryGame();
-    
-    // Make game instance globally accessible for debugging
-    window.mtrGame = game;
-    
-    // Add some helpful console messages
-    console.log('🚇 Hong Kong MTR Memory Game loaded!');
-    console.log('🗺️ Interactive map enabled - stations will appear as you find them!');
-    console.log('💡 Tips:');
-    console.log('   - Try typing "Central", "TST", "Airport", or "HKU"');
-    console.log('   - Use Ctrl+R to reset the game');
-    console.log('   - 98 stations total across 10 MTR lines');
-    console.log('   - Your progress is automatically saved');
-    console.log('   - Hover over found stations on the map for details');
+    window.mtrGame = game; // For debugging
 });
 
-// Add some utility functions for debugging
-window.mtrGameHelpers = {
-    showHint: () => {
+// Debug helpers
+window.mtrHelpers = {
+    hint: () => {
         const game = window.mtrGame;
-        if (!game) return;
-        
-        const unfoundStations = Object.keys(game.stationData).filter(station => 
-            !game.foundStations.has(station)
-        );
-        
-        if (unfoundStations.length > 0) {
-            const randomStation = unfoundStations[Math.floor(Math.random() * unfoundStations.length)];
-            console.log(`💡 Hint: Try "${randomStation}"`);
-            return randomStation;
-        } else {
-            console.log('🎉 All stations found!');
-        }
+        const unfound = Object.keys(game.stationData).filter(s => !game.foundStations.has(s));
+        const random = unfound[Math.floor(Math.random() * unfound.length)];
+        console.log(`💡 Try: ${random}`);
+        return random;
     },
     
-    showProgress: () => {
-        const game = window.mtrGame;
-        if (!game) return;
-        
-        console.log(`📊 Progress: ${game.foundStations.size}/${game.totalStations} stations found`);
-        
-        Object.keys(game.lineStationCounts).forEach(line => {
-            const lineStations = Array.from(document.querySelectorAll(`[data-line="${line}"] .station`));
-            const foundInLine = lineStations.filter(station => station.classList.contains('found')).length;
-            const totalInLine = game.lineStationCounts[line];
-            console.log(`   ${line}: ${foundInLine}/${totalInLine}`);
-        });
-    },
-    
-    autoComplete: () => {
-        const game = window.mtrGame;
-        if (!game) return;
-        
-        if (confirm('This will automatically complete the game. Continue?')) {
+    complete: () => {
+        if (confirm('Auto-complete all stations?')) {
+            const game = window.mtrGame;
             Object.keys(game.stationData).forEach(station => {
                 if (!game.foundStations.has(station)) {
                     game.foundStation(station);
@@ -583,11 +469,9 @@ window.mtrGameHelpers = {
         }
     },
     
-    showMapInfo: () => {
-        console.log('🗺️ Interactive Map Features:');
-        console.log('   - Stations appear with animations when found');
-        console.log('   - Hover over found stations for visual feedback');
-        console.log('   - Line completion triggers map-wide effects');
-        console.log('   - Map is responsive and scrollable on mobile');
+    stats: () => {
+        const game = window.mtrGame;
+        console.log(`📊 Found: ${game.foundStations.size}/${game.totalStations}`);
+        console.log('📍 Found stations:', Array.from(game.foundStations).sort());
     }
 };
