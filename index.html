@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hong Kong MTR Memory Game</title>
+    <meta name="description" content="Hong Kong MTR Memory Game - Test your knowledge of all 98 MTR stations">
+    <meta property="og:title" content="Hong Kong MTR Memory Game">
+    <meta property="og:description" content="Can you name all 98 Hong Kong MTR stations from memory?">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="game-header">
+            <h1>🚇 Hong Kong MTR Memory Game</h1>
+            <p class="subtitle">Can you name all 98 MTR stations from memory?</p>
+            <div class="game-stats">
+                <div class="progress-display">
+                    <div class="progress-circle">
+                        <span class="percentage">0.0%</span>
+                    </div>
+                    <div class="station-info">
+                        <span class="station-count">0/98 stations found</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn reset-btn" id="resetBtn">🔄 Reset Game</button>
+            </div>
+        </header>
+
+        <div class="game-input">
+            <div class="input-container">
+                <input 
+                    type="text" 
+                    id="stationInput" 
+                    class="station-input" 
+                    placeholder="Type station name..."
+                    autocomplete="off"
+                    spellcheck="false"
+                >
+                <div class="input-hint">Start typing any MTR station name</div>
+            </div>
+        </div>
+
+        <div class="mtr-map-container">
+            <div class="map-header">
+                <h2>MTR System Map</h2>
+                <div class="found-indicator">
+                    <span class="found-count">0</span> stations revealed
+                </div>
+            </div>
+            
+            <div class="lines-container">
+                <!-- Island Line -->
+                <div class="line-section" data-line="Island Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #0073e6;"></span>
+                        <span class="line-name">Island Line</span>
+                        <span class="line-progress">0/17</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Kennedy Town" data-line="Island Line">Kennedy Town</div>
+                        <div class="station" data-station="HKU" data-line="Island Line">HKU</div>
+                        <div class="station" data-station="Sai Ying Pun" data-line="Island Line">Sai Ying Pun</div>
+                        <div class="station" data-station="Sheung Wan" data-line="Island Line">Sheung Wan</div>
+                        <div class="station" data-station="Central" data-line="Island Line">Central</div>
+                        <div class="station" data-station="Admiralty" data-line="Island Line">Admiralty</div>
+                        <div class="station" data-station="Wan Chai" data-line="Island Line">Wan Chai</div>
+                        <div class="station" data-station="Causeway Bay" data-line="Island Line">Causeway Bay</div>
+                        <div class="station" data-station="Tin Hau" data-line="Island Line">Tin Hau</div>
+                        <div class="station" data-station="Fortress Hill" data-line="Island Line">Fortress Hill</div>
+                        <div class="station" data-station="North Point" data-line="Island Line">North Point</div>
+                        <div class="station" data-station="Quarry Bay" data-line="Island Line">Quarry Bay</div>
+                        <div class="station" data-station="Tai Koo" data-line="Island Line">Tai Koo</div>
+                        <div class="station" data-station="Sai Wan Ho" data-line="Island Line">Sai Wan Ho</div>
+                        <div class="station" data-station="Shau Kei Wan" data-line="Island Line">Shau Kei Wan</div>
+                        <div class="station" data-station="Heng Fa Chuen" data-line="Island Line">Heng Fa Chuen</div>
+                        <div class="station" data-station="Chai Wan" data-line="Island Line">Chai Wan</div>
+                    </div>
+                </div>
+
+                <!-- Kwun Tong Line -->
+                <div class="line-section" data-line="Kwun Tong Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #00a651;"></span>
+                        <span class="line-name">Kwun Tong Line</span>
+                        <span class="line-progress">0/17</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Whampoa" data-line="Kwun Tong Line">Whampoa</div>
+                        <div class="station" data-station="Ho Man Tin" data-line="Kwun Tong Line">Ho Man Tin</div>
+                        <div class="station" data-station="Yau Ma Tei" data-line="Kwun Tong Line">Yau Ma Tei</div>
+                        <div class="station" data-station="Mong Kok" data-line="Kwun Tong Line">Mong Kok</div>
+                        <div class="station" data-station="Prince Edward" data-line="Kwun Tong Line">Prince Edward</div>
+                        <div class="station" data-station="Shek Kip Mei" data-line="Kwun Tong Line">Shek Kip Mei</div>
+                        <div class="station" data-station="Kowloon Tong" data-line="Kwun Tong Line">Kowloon Tong</div>
+                        <div class="station" data-station="Lok Fu" data-line="Kwun Tong Line">Lok Fu</div>
+                        <div class="station" data-station="Wong Tai Sin" data-line="Kwun Tong Line">Wong Tai Sin</div>
+                        <div class="station" data-station="Diamond Hill" data-line="Kwun Tong Line">Diamond Hill</div>
+                        <div class="station" data-station="Choi Hung" data-line="Kwun Tong Line">Choi Hung</div>
+                        <div class="station" data-station="Kowloon Bay" data-line="Kwun Tong Line">Kowloon Bay</div>
+                        <div class="station" data-station="Ngau Tau Kok" data-line="Kwun Tong Line">Ngau Tau Kok</div>
+                        <div class="station" data-station="Kwun Tong" data-line="Kwun Tong Line">Kwun Tong</div>
+                        <div class="station" data-station="Lam Tin" data-line="Kwun Tong Line">Lam Tin</div>
+                        <div class="station" data-station="Yau Tong" data-line="Kwun Tong Line">Yau Tong</div>
+                        <div class="station" data-station="Tiu Keng Leng" data-line="Kwun Tong Line">Tiu Keng Leng</div>
+                    </div>
+                </div>
+
+                <!-- Tsuen Wan Line -->
+                <div class="line-section" data-line="Tsuen Wan Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #ff0000;"></span>
+                        <span class="line-name">Tsuen Wan Line</span>
+                        <span class="line-progress">0/16</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Central" data-line="Tsuen Wan Line">Central</div>
+                        <div class="station" data-station="Admiralty" data-line="Tsuen Wan Line">Admiralty</div>
+                        <div class="station" data-station="Tsim Sha Tsui" data-line="Tsuen Wan Line">Tsim Sha Tsui</div>
+                        <div class="station" data-station="Jordan" data-line="Tsuen Wan Line">Jordan</div>
+                        <div class="station" data-station="Yau Ma Tei" data-line="Tsuen Wan Line">Yau Ma Tei</div>
+                        <div class="station" data-station="Mong Kok" data-line="Tsuen Wan Line">Mong Kok</div>
+                        <div class="station" data-station="Prince Edward" data-line="Tsuen Wan Line">Prince Edward</div>
+                        <div class="station" data-station="Sham Shui Po" data-line="Tsuen Wan Line">Sham Shui Po</div>
+                        <div class="station" data-station="Cheung Sha Wan" data-line="Tsuen Wan Line">Cheung Sha Wan</div>
+                        <div class="station" data-station="Lai Chi Kok" data-line="Tsuen Wan Line">Lai Chi Kok</div>
+                        <div class="station" data-station="Mei Foo" data-line="Tsuen Wan Line">Mei Foo</div>
+                        <div class="station" data-station="Lai King" data-line="Tsuen Wan Line">Lai King</div>
+                        <div class="station" data-station="Kwai Fong" data-line="Tsuen Wan Line">Kwai Fong</div>
+                        <div class="station" data-station="Kwai Hing" data-line="Tsuen Wan Line">Kwai Hing</div>
+                        <div class="station" data-station="Tai Wo Hau" data-line="Tsuen Wan Line">Tai Wo Hau</div>
+                        <div class="station" data-station="Tsuen Wan" data-line="Tsuen Wan Line">Tsuen Wan</div>
+                    </div>
+                </div>
+
+                <!-- Tseung Kwan O Line -->
+                <div class="line-section" data-line="Tseung Kwan O Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #8e4ec6;"></span>
+                        <span class="line-name">Tseung Kwan O Line</span>
+                        <span class="line-progress">0/8</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="North Point" data-line="Tseung Kwan O Line">North Point</div>
+                        <div class="station" data-station="Quarry Bay" data-line="Tseung Kwan O Line">Quarry Bay</div>
+                        <div class="station" data-station="Yau Tong" data-line="Tseung Kwan O Line">Yau Tong</div>
+                        <div class="station" data-station="Tiu Keng Leng" data-line="Tseung Kwan O Line">Tiu Keng Leng</div>
+                        <div class="station" data-station="Tseung Kwan O" data-line="Tseung Kwan O Line">Tseung Kwan O</div>
+                        <div class="station" data-station="Hang Hau" data-line="Tseung Kwan O Line">Hang Hau</div>
+                        <div class="station" data-station="Po Lam" data-line="Tseung Kwan O Line">Po Lam</div>
+                        <div class="station" data-station="LOHAS Park" data-line="Tseung Kwan O Line">LOHAS Park</div>
+                    </div>
+                </div>
+
+                <!-- Tung Chung Line -->
+                <div class="line-section" data-line="Tung Chung Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #ff9500;"></span>
+                        <span class="line-name">Tung Chung Line</span>
+                        <span class="line-progress">0/8</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Hong Kong" data-line="Tung Chung Line">Hong Kong</div>
+                        <div class="station" data-station="Kowloon" data-line="Tung Chung Line">Kowloon</div>
+                        <div class="station" data-station="Olympic" data-line="Tung Chung Line">Olympic</div>
+                        <div class="station" data-station="Nam Cheong" data-line="Tung Chung Line">Nam Cheong</div>
+                        <div class="station" data-station="Lai King" data-line="Tung Chung Line">Lai King</div>
+                        <div class="station" data-station="Tsing Yi" data-line="Tung Chung Line">Tsing Yi</div>
+                        <div class="station" data-station="Sunny Bay" data-line="Tung Chung Line">Sunny Bay</div>
+                        <div class="station" data-station="Tung Chung" data-line="Tung Chung Line">Tung Chung</div>
+                    </div>
+                </div>
+
+                <!-- Airport Express -->
+                <div class="line-section" data-line="Airport Express">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #00b7a7;"></span>
+                        <span class="line-name">Airport Express</span>
+                        <span class="line-progress">0/5</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Hong Kong" data-line="Airport Express">Hong Kong</div>
+                        <div class="station" data-station="Kowloon" data-line="Airport Express">Kowloon</div>
+                        <div class="station" data-station="Tsing Yi" data-line="Airport Express">Tsing Yi</div>
+                        <div class="station" data-station="Airport" data-line="Airport Express">Airport</div>
+                        <div class="station" data-station="AsiaWorld-Expo" data-line="Airport Express">AsiaWorld-Expo</div>
+                    </div>
+                </div>
+
+                <!-- East Rail Line -->
+                <div class="line-section" data-line="East Rail Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #5ac4e8;"></span>
+                        <span class="line-name">East Rail Line</span>
+                        <span class="line-progress">0/16</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Admiralty" data-line="East Rail Line">Admiralty</div>
+                        <div class="station" data-station="Exhibition Centre" data-line="East Rail Line">Exhibition Centre</div>
+                        <div class="station" data-station="Hung Hom" data-line="East Rail Line">Hung Hom</div>
+                        <div class="station" data-station="Mong Kok East" data-line="East Rail Line">Mong Kok East</div>
+                        <div class="station" data-station="Kowloon Tong" data-line="East Rail Line">Kowloon Tong</div>
+                        <div class="station" data-station="Tai Wai" data-line="East Rail Line">Tai Wai</div>
+                        <div class="station" data-station="Sha Tin" data-line="East Rail Line">Sha Tin</div>
+                        <div class="station" data-station="Fo Tan" data-line="East Rail Line">Fo Tan</div>
+                        <div class="station" data-station="Racecourse" data-line="East Rail Line">Racecourse</div>
+                        <div class="station" data-station="University" data-line="East Rail Line">University</div>
+                        <div class="station" data-station="Tai Po Market" data-line="East Rail Line">Tai Po Market</div>
+                        <div class="station" data-station="Tai Wo" data-line="East Rail Line">Tai Wo</div>
+                        <div class="station" data-station="Fanling" data-line="East Rail Line">Fanling</div>
+                        <div class="station" data-station="Sheung Shui" data-line="East Rail Line">Sheung Shui</div>
+                        <div class="station" data-station="Lo Wu" data-line="East Rail Line">Lo Wu</div>
+                        <div class="station" data-station="Lok Ma Chau" data-line="East Rail Line">Lok Ma Chau</div>
+                    </div>
+                </div>
+
+                <!-- Tuen Ma Line -->
+                <div class="line-section" data-line="Tuen Ma Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #8d5524;"></span>
+                        <span class="line-name">Tuen Ma Line</span>
+                        <span class="line-progress">0/27</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Tuen Mun" data-line="Tuen Ma Line">Tuen Mun</div>
+                        <div class="station" data-station="Siu Hong" data-line="Tuen Ma Line">Siu Hong</div>
+                        <div class="station" data-station="Tin Shui Wai" data-line="Tuen Ma Line">Tin Shui Wai</div>
+                        <div class="station" data-station="Long Ping" data-line="Tuen Ma Line">Long Ping</div>
+                        <div class="station" data-station="Yuen Long" data-line="Tuen Ma Line">Yuen Long</div>
+                        <div class="station" data-station="Kam Sheung Road" data-line="Tuen Ma Line">Kam Sheung Road</div>
+                        <div class="station" data-station="Tsuen Wan West" data-line="Tuen Ma Line">Tsuen Wan West</div>
+                        <div class="station" data-station="Mei Foo" data-line="Tuen Ma Line">Mei Foo</div>
+                        <div class="station" data-station="Nam Cheong" data-line="Tuen Ma Line">Nam Cheong</div>
+                        <div class="station" data-station="Austin" data-line="Tuen Ma Line">Austin</div>
+                        <div class="station" data-station="East Tsim Sha Tsui" data-line="Tuen Ma Line">East Tsim Sha Tsui</div>
+                        <div class="station" data-station="Hung Hom" data-line="Tuen Ma Line">Hung Hom</div>
+                        <div class="station" data-station="Ho Man Tin" data-line="Tuen Ma Line">Ho Man Tin</div>
+                        <div class="station" data-station="To Kwa Wan" data-line="Tuen Ma Line">To Kwa Wan</div>
+                        <div class="station" data-station="Sung Wong Toi" data-line="Tuen Ma Line">Sung Wong Toi</div>
+                        <div class="station" data-station="Kai Tak" data-line="Tuen Ma Line">Kai Tak</div>
+                        <div class="station" data-station="Diamond Hill" data-line="Tuen Ma Line">Diamond Hill</div>
+                        <div class="station" data-station="Hin Keng" data-line="Tuen Ma Line">Hin Keng</div>
+                        <div class="station" data-station="Tai Wai" data-line="Tuen Ma Line">Tai Wai</div>
+                        <div class="station" data-station="Che Kung Temple" data-line="Tuen Ma Line">Che Kung Temple</div>
+                        <div class="station" data-station="Sha Tin Wai" data-line="Tuen Ma Line">Sha Tin Wai</div>
+                        <div class="station" data-station="City One" data-line="Tuen Ma Line">City One</div>
+                        <div class="station" data-station="Shek Mun" data-line="Tuen Ma Line">Shek Mun</div>
+                        <div class="station" data-station="Tai Shui Hang" data-line="Tuen Ma Line">Tai Shui Hang</div>
+                        <div class="station" data-station="Heng On" data-line="Tuen Ma Line">Heng On</div>
+                        <div class="station" data-station="Ma On Shan" data-line="Tuen Ma Line">Ma On Shan</div>
+                        <div class="station" data-station="Wu Kai Sha" data-line="Tuen Ma Line">Wu Kai Sha</div>
+                    </div>
+                </div>
+
+                <!-- South Island Line -->
+                <div class="line-section" data-line="South Island Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #ffda00;"></span>
+                        <span class="line-name">South Island Line</span>
+                        <span class="line-progress">0/5</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Admiralty" data-line="South Island Line">Admiralty</div>
+                        <div class="station" data-station="Ocean Park" data-line="South Island Line">Ocean Park</div>
+                        <div class="station" data-station="Wong Chuk Hang" data-line="South Island Line">Wong Chuk Hang</div>
+                        <div class="station" data-station="Lei Tung" data-line="South Island Line">Lei Tung</div>
+                        <div class="station" data-station="South Horizons" data-line="South Island Line">South Horizons</div>
+                    </div>
+                </div>
+
+                <!-- Disneyland Resort Line -->
+                <div class="line-section" data-line="Disneyland Resort Line">
+                    <div class="line-header">
+                        <span class="line-color" style="background-color: #ff69b4;"></span>
+                        <span class="line-name">Disneyland Resort Line</span>
+                        <span class="line-progress">0/2</span>
+                    </div>
+                    <div class="stations-grid">
+                        <div class="station" data-station="Sunny Bay" data-line="Disneyland Resort Line">Sunny Bay</div>
+                        <div class="station" data-station="Disneyland Resort" data-line="Disneyland Resort Line">Disneyland Resort</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-footer">
+            <p>🎯 Challenge: Can you name all 98 MTR stations? Good luck!</p>
+            <p>💡 Tip: Try common stations first, then think about the lines you use less often.</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
