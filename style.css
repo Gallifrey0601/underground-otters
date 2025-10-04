@@ -738,7 +738,8 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-/* Clean Hong Kong MTR Memory Game */
+```css
+/* Clean Hong Kong MTR Memory Game - Simple and Working */
 
 * {
     margin: 0;
@@ -754,7 +755,7 @@ body {
 }
 
 .game-container {
-    max-width: var(--container-xl);
+    max-width: 1200px;
     margin: 0 auto;
     padding: var(--space-20);
 }
@@ -770,10 +771,10 @@ body {
 }
 
 .header h1 {
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-3xl);
     color: var(--color-text);
     margin-bottom: var(--space-16);
-    font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-semibold);
 }
 
 .progress-info {
@@ -790,7 +791,7 @@ body {
 }
 
 .station-count {
-    font-size: var(--font-size-xl);
+    font-size: var(--font-size-lg);
     color: var(--color-text-secondary);
     align-self: center;
 }
@@ -814,12 +815,11 @@ body {
     transition: all var(--duration-normal) var(--ease-standard);
     background: var(--color-surface);
     color: var(--color-text);
-    font-family: var(--font-family-base);
 }
 
 .station-input:focus {
     border-color: var(--color-success);
-    box-shadow: var(--focus-ring);
+    box-shadow: 0 0 0 3px rgba(var(--color-success-rgb), 0.4);
 }
 
 .reset-btn {
@@ -832,11 +832,10 @@ body {
     cursor: pointer;
     font-weight: var(--font-weight-medium);
     transition: background var(--duration-normal) var(--ease-standard);
-    font-family: var(--font-family-base);
 }
 
 .reset-btn:hover {
-    background: rgba(var(--color-error-rgb), 0.8);
+    background: rgba(var(--color-error-rgb), 0.9);
 }
 
 .reset-btn:focus-visible {
@@ -864,40 +863,34 @@ body {
 .mtr-map {
     width: 100%;
     height: auto;
-    min-height: 400px;
+    min-height: 500px;
     background: var(--color-surface);
+    border: 1px solid var(--color-border);
 }
 
-/* Station Markers - Start Hidden */
+/* Station Markers - Everything starts hidden */
 .station-marker {
     transition: all var(--duration-normal) var(--ease-standard);
 }
 
-/* Station Labels - Start Hidden */
-.station-label {
+.station-marker circle {
+    transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.station-marker text {
     font-family: var(--font-family-base);
-    font-size: var(--font-size-xs);
+    font-size: 10px;
     font-weight: var(--font-weight-medium);
-    text-anchor: middle;
     fill: var(--color-text);
     pointer-events: none;
 }
 
-.station-label.major {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-}
-
-/* When station is found - REVEALED */
+/* When station is found - SHOW IT */
 .station-marker.found circle {
-    opacity: 1 !important; /* Make visible */
-    fill: var(--color-success) !important; /* Green color */
-    r: 6; /* Slightly larger */
     animation: stationReveal 0.6s var(--ease-standard);
 }
 
-.station-marker.found .station-label {
-    opacity: 1 !important; /* Make visible */
+.station-marker.found text {
     font-weight: var(--font-weight-semibold);
 }
 
@@ -915,13 +908,6 @@ body {
         opacity: 1;
         transform: scale(1);
     }
-}
-
-/* Line Paths */
-.line-path {
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: 0.7;
 }
 
 /* Success Celebration */
@@ -951,7 +937,7 @@ body {
     100% { opacity: 0; visibility: hidden; }
 }
 
-/* Responsive Design - Mobile Portrait */
+/* Mobile Portrait Responsive Design */
 @media (max-width: 480px) {
     .game-container {
         padding: var(--space-12);
@@ -963,14 +949,7 @@ body {
     }
     
     .header h1 {
-        font-size: var(--font-size-3xl);
-        margin-bottom: var(--space-12);
-    }
-    
-    .progress-info {
-        gap: var(--space-16);
-        flex-direction: column;
-        align-items: center;
+        font-size: var(--font-size-2xl);
     }
     
     .percentage {
@@ -981,30 +960,29 @@ body {
         font-size: var(--font-size-base);
     }
     
+    .progress-info {
+        gap: var(--space-16);
+    }
+    
     .input-section {
-        flex-direction: column;
-        align-items: center;
         gap: var(--space-12);
-        margin-bottom: var(--space-16);
+        margin-bottom: var(--space-20);
     }
     
     .station-input {
         width: 100%;
-        max-width: 300px;
+        max-width: none;
         padding: var(--space-12) var(--space-16);
         font-size: var(--font-size-base);
     }
     
     .reset-btn {
         width: 100%;
-        max-width: 200px;
         padding: var(--space-12) var(--space-16);
-        font-size: var(--font-size-sm);
     }
     
     .map-section {
         padding: var(--space-12);
-        margin-bottom: var(--space-16);
     }
     
     .map-container {
@@ -1014,39 +992,27 @@ body {
     
     .mtr-map {
         min-width: 600px;
-        min-height: 250px;
-    }
-    
-    .station-label {
-        font-size: 8px;
-    }
-    
-    .station-label.major {
-        font-size: 9px;
+        min-height: 300px;
     }
     
     .celebration-content {
         font-size: var(--font-size-3xl);
-        padding: 0 var(--space-16);
+        padding: var(--space-16);
     }
 }
 
-/* Responsive Design - Tablet */
+/* Tablet Responsive Design */
 @media (max-width: 768px) {
     .game-container {
         padding: var(--space-16);
     }
     
     .header h1 {
-        font-size: var(--font-size-3xl);
+        font-size: var(--font-size-2xl);
     }
     
     .percentage {
         font-size: var(--font-size-3xl);
-    }
-    
-    .progress-info {
-        gap: var(--space-24);
     }
     
     .station-input {
@@ -1061,14 +1027,7 @@ body {
     
     .mtr-map {
         min-width: 800px;
-        min-height: 300px;
-    }
-    
-    .station-label {
-        font-size: 9px;
-    }
-    
-    .station-label.major {
-        font-size: var(--font-size-xs);
+        min-height: 400px;
     }
 }
+```
