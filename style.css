@@ -738,7 +738,7 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-/* Hong Kong MTR Memory Game - Interactive Map Style */
+/* Clean Hong Kong MTR Memory Game Styles */
 
 * {
     margin: 0;
@@ -751,7 +751,6 @@ body {
     background: var(--color-background);
     color: var(--color-text);
     line-height: var(--line-height-normal);
-    -webkit-font-smoothing: antialiased;
 }
 
 .game-container {
@@ -767,16 +766,15 @@ body {
     border-radius: var(--radius-lg);
     padding: var(--space-20);
     margin-bottom: var(--space-20);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-card-border);
 }
 
 .header h1 {
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-3xl);
     color: var(--color-text);
     margin-bottom: var(--space-16);
     font-weight: var(--font-weight-semibold);
-    letter-spacing: var(--letter-spacing-tight);
 }
 
 .progress-info {
@@ -790,7 +788,6 @@ body {
     font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-primary);
-    line-height: var(--line-height-tight);
 }
 
 .station-count {
@@ -811,18 +808,17 @@ body {
 .station-input {
     padding: var(--space-12) var(--space-16);
     font-size: var(--font-size-lg);
-    border: 2px solid var(--color-primary);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-base);
     outline: none;
     width: 300px;
-    transition: all var(--duration-normal) var(--ease-standard);
-    background-color: var(--color-surface);
+    background: var(--color-surface);
     color: var(--color-text);
-    font-family: var(--font-family-base);
+    transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .station-input:focus {
-    border-color: var(--color-success);
+    border-color: var(--color-primary);
     box-shadow: var(--focus-ring);
 }
 
@@ -833,14 +829,13 @@ body {
     border: none;
     border-radius: var(--radius-base);
     font-size: var(--font-size-base);
-    cursor: pointer;
     font-weight: var(--font-weight-medium);
-    transition: background var(--duration-normal) var(--ease-standard);
-    font-family: var(--font-family-base);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .reset-btn:hover {
-    background: var(--color-red-500);
+    background: var(--color-red-400);
 }
 
 .reset-btn:focus-visible {
@@ -848,20 +843,20 @@ body {
     box-shadow: var(--focus-ring);
 }
 
-/* Map Section - Main Feature */
+/* Clean Map Section */
 .map-section {
     background: var(--color-surface);
     border-radius: var(--radius-lg);
     padding: var(--space-20);
-    box-shadow: var(--shadow-md);
-    margin-bottom: var(--space-20);
+    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-card-border);
+    margin-bottom: var(--space-20);
 }
 
 .map-container {
     width: 100%;
     overflow-x: auto;
-    background: var(--color-background);
+    background: var(--color-surface);
     border-radius: var(--radius-base);
     padding: var(--space-16);
 }
@@ -874,7 +869,7 @@ body {
     border-radius: var(--radius-sm);
 }
 
-/* Station Markers */
+/* Station Markers - HIDDEN BY DEFAULT */
 .station-marker {
     cursor: pointer;
     transition: all var(--duration-normal) var(--ease-standard);
@@ -882,43 +877,17 @@ body {
 
 .station-marker circle {
     transition: all var(--duration-normal) var(--ease-standard);
+    opacity: 0; /* Hidden by default */
 }
 
-.station-marker.found circle {
-    fill: var(--color-success) !important;
-    r: 6;
-    filter: drop-shadow(0 0 4px rgba(var(--color-success-rgb), 0.6));
-    animation: stationPulse 0.6s ease;
-}
-
-.station-marker:hover circle {
-    r: 6;
-    filter: drop-shadow(0 0 6px currentColor);
-}
-
-@keyframes stationPulse {
-    0% {
-        r: 4;
-        opacity: 0.5;
-    }
-    50% {
-        r: 8;
-        opacity: 1;
-    }
-    100% {
-        r: 6;
-        opacity: 1;
-    }
-}
-
-/* Station Labels */
+/* Station Labels - HIDDEN BY DEFAULT */
 .station-label {
     font-family: var(--font-family-base);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
     text-anchor: middle;
     fill: var(--color-text);
-    opacity: 0;
+    opacity: 0; /* Hidden by default */
     transition: opacity var(--duration-normal) var(--ease-standard);
     pointer-events: none;
 }
@@ -928,13 +897,35 @@ body {
     font-weight: var(--font-weight-semibold);
 }
 
-.station-label.hidden {
-    opacity: 0;
+/* Station Found State - VISIBLE WHEN DISCOVERED */
+.station-marker.found circle {
+    opacity: 1 !important; /* Show station circle */
+    fill: var(--color-success) !important; /* Success color when found */
+    r: 6; /* Slightly larger */
+    filter: drop-shadow(0 0 4px rgba(var(--color-success-rgb), 0.6));
+    animation: stationAppear 0.6s var(--ease-standard);
 }
 
 .station-marker.found .station-label {
-    opacity: 1 !important;
+    opacity: 1 !important; /* Show station name */
     font-weight: var(--font-weight-semibold);
+    fill: var(--color-text);
+}
+
+/* Station appearance animation */
+@keyframes stationAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /* Line Paths */
@@ -949,7 +940,7 @@ body {
     opacity: 1;
     stroke-width: 6 !important;
     filter: drop-shadow(0 0 8px currentColor);
-    animation: lineComplete 1s ease;
+    animation: lineComplete 1s var(--ease-standard);
 }
 
 @keyframes lineComplete {
@@ -963,22 +954,21 @@ body {
     background: var(--color-surface);
     border-radius: var(--radius-lg);
     padding: var(--space-20);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
     border: 1px solid var(--color-card-border);
 }
 
 .toggle-details {
     width: 100%;
-    padding: var(--space-12);
+    padding: var(--space-16);
     background: var(--color-primary);
     color: var(--color-btn-primary-text);
     border: none;
     border-radius: var(--radius-base);
     font-size: var(--font-size-base);
-    cursor: pointer;
-    transition: background var(--duration-normal) var(--ease-standard);
-    font-family: var(--font-family-base);
     font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .toggle-details:hover {
@@ -1006,7 +996,7 @@ body {
 }
 
 .line-section {
-    border: 2px solid var(--color-card-border);
+    border: 1px solid var(--color-card-border);
     border-radius: var(--radius-base);
     overflow: hidden;
     background: var(--color-surface);
@@ -1052,13 +1042,13 @@ body {
 .station-item {
     padding: var(--space-8) var(--space-12);
     background: var(--color-secondary);
-    border: 1px solid var(--color-card-border);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     text-align: center;
     font-size: var(--font-size-sm);
+    color: var(--color-text);
     opacity: 0.4;
     transition: all var(--duration-normal) var(--ease-standard);
-    color: var(--color-text);
 }
 
 .station-item.found {
@@ -1081,7 +1071,7 @@ body {
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    animation: celebrationShow 3s ease forwards;
+    animation: celebrationShow 3s var(--ease-standard) forwards;
 }
 
 .celebration-content {
@@ -1089,7 +1079,7 @@ body {
     color: var(--color-white);
     font-size: var(--font-size-4xl);
     font-weight: var(--font-weight-bold);
-    animation: celebrationBounce 1s ease infinite;
+    animation: celebrationBounce 1s var(--ease-standard) infinite;
 }
 
 @keyframes celebrationShow {
@@ -1112,9 +1102,9 @@ body {
     padding: var(--space-12) var(--space-20);
     border-radius: var(--radius-base);
     font-weight: var(--font-weight-semibold);
+    box-shadow: var(--shadow-md);
     z-index: 1000;
-    animation: slideInOut 3s ease forwards;
-    box-shadow: var(--shadow-lg);
+    animation: slideInOut 3s var(--ease-standard) forwards;
 }
 
 @keyframes slideInOut {
@@ -1130,7 +1120,7 @@ body {
     }
     
     .header h1 {
-        font-size: var(--font-size-3xl);
+        font-size: var(--font-size-2xl);
     }
     
     .progress-info {
@@ -1162,7 +1152,7 @@ body {
     }
     
     .station-label {
-        font-size: 9px;
+        font-size: var(--font-size-xs);
     }
     
     .lines-grid {
@@ -1181,13 +1171,14 @@ body {
     }
     
     .header h1 {
-        font-size: var(--font-size-2xl);
+        font-size: var(--font-size-xl);
         margin-bottom: var(--space-12);
     }
     
     .progress-info {
         gap: var(--space-16);
         flex-direction: column;
+        align-items: center;
     }
     
     .percentage {
@@ -1200,7 +1191,7 @@ body {
     
     .input-section {
         gap: var(--space-12);
-        margin-bottom: var(--space-20);
+        margin-bottom: var(--space-16);
     }
     
     .station-input {
@@ -1213,13 +1204,9 @@ body {
         font-size: var(--font-size-sm);
     }
     
-    .map-section {
+    .map-section, .details-section {
         padding: var(--space-16);
         margin-bottom: var(--space-16);
-    }
-    
-    .map-container {
-        padding: var(--space-8);
     }
     
     .mtr-map {
@@ -1231,35 +1218,19 @@ body {
         font-size: 8px;
     }
     
-    .details-section {
-        padding: var(--space-16);
-    }
-    
     .toggle-details {
-        padding: var(--space-10);
+        padding: var(--space-12);
         font-size: var(--font-size-sm);
-    }
-    
-    .station-lists {
-        margin-top: var(--space-16);
-    }
-    
-    .lines-grid {
-        gap: var(--space-16);
     }
     
     .line-header {
         padding: var(--space-10) var(--space-12);
-        gap: var(--space-8);
-    }
-    
-    .line-name {
-        font-size: var(--font-size-sm);
     }
     
     .stations-grid {
         padding: var(--space-12);
         gap: var(--space-6);
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
     
     .station-item {
@@ -1276,6 +1247,22 @@ body {
     
     .celebration-content {
         font-size: var(--font-size-3xl);
-        padding: var(--space-20);
+        padding: var(--space-16);
+    }
+}
+
+/* Print styles */
+@media print {
+    .input-section, .reset-btn, .celebration {
+        display: none;
+    }
+    
+    .map-section, .details-section {
+        box-shadow: none;
+        background: var(--color-white);
+    }
+    
+    .mtr-map {
+        background: var(--color-white);
     }
 }

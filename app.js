@@ -1,4 +1,4 @@
-// Hong Kong MTR Memory Game - Interactive Map Version
+// Clean Hong Kong MTR Memory Game - Like London Metro Memory
 class MTRMemoryGame {
     constructor() {
         this.totalStations = 98;
@@ -142,7 +142,7 @@ class MTRMemoryGame {
         this.stationInput.focus();
         
         console.log('🚇 Hong Kong MTR Memory Game loaded!');
-        console.log('🗺️ Interactive map ready - type station names to see them appear!');
+        console.log('🗺️ Clean map ready - stations are HIDDEN until you discover them!');
         console.log('💡 Try: Central, TST, Airport, HKU, Tseung Kwan O');
     }
 
@@ -189,7 +189,7 @@ class MTRMemoryGame {
     foundStation(stationName) {
         this.foundStations.add(stationName);
         
-        // Show station on map
+        // Show station on map - KEY FUNCTIONALITY
         this.showStationOnMap(stationName);
         
         // Update displays
@@ -209,29 +209,29 @@ class MTRMemoryGame {
     }
 
     showStationOnMap(stationName) {
-        // Find all station markers with this name
+        // Find all station markers with this name and MAKE THEM VISIBLE
         const stationMarkers = document.querySelectorAll(`[data-station="${stationName}"]`);
         
         stationMarkers.forEach(marker => {
-            marker.classList.add('found');
-            
-            // Show the station label
-            const label = marker.querySelector('.station-label');
-            if (label) {
-                label.classList.remove('hidden');
-            }
-            
-            // Add entrance animation
-            const circle = marker.querySelector('circle');
-            if (circle) {
-                // Trigger animation by temporarily changing size
-                const originalR = circle.getAttribute('r');
-                circle.setAttribute('r', '8');
-                setTimeout(() => {
-                    circle.setAttribute('r', '6');
-                }, 300);
+            if (marker.classList.contains('station-marker')) {
+                // Add 'found' class to make station visible
+                marker.classList.add('found');
+                
+                // Station circle becomes visible and green
+                const circle = marker.querySelector('circle');
+                if (circle) {
+                    // Trigger entrance animation
+                    setTimeout(() => {
+                        circle.style.transform = 'scale(1.2)';
+                        setTimeout(() => {
+                            circle.style.transform = 'scale(1)';
+                        }, 200);
+                    }, 100);
+                }
             }
         });
+        
+        console.log(`✅ ${stationName} found and revealed on map!`);
     }
 
     checkLineCompletion(stationName) {
@@ -250,8 +250,10 @@ class MTRMemoryGame {
 
     celebrateLineCompletion(lineName) {
         // Find the line group and add completion effect
-        const lineGroups = document.querySelectorAll('.line-group');
-        // Note: We'd need to add data-line attributes to properly identify lines
+        const lineGroup = document.querySelector(`[data-line="${lineName}"]`);
+        if (lineGroup) {
+            lineGroup.classList.add('completed');
+        }
         
         // Show notification
         this.showNotification(`🎉 ${lineName} Complete!`);
@@ -329,14 +331,17 @@ class MTRMemoryGame {
         // Update line progress counters
         Object.keys(this.lineData).forEach(lineName => {
             if (this.lineData[lineName].includes(stationName)) {
-                const lineSection = document.querySelector('.line-section');
-                if (lineSection) {
-                    const foundInLine = this.lineData[lineName].filter(station => this.foundStations.has(station)).length;
-                    const progressElement = lineSection.querySelector('.line-progress');
-                    if (progressElement) {
-                        progressElement.textContent = `${foundInLine}/${this.lineData[lineName].length}`;
+                const lineHeaders = document.querySelectorAll('.line-header');
+                lineHeaders.forEach(header => {
+                    const nameElement = header.querySelector('.line-name');
+                    if (nameElement && nameElement.textContent === lineName) {
+                        const foundInLine = this.lineData[lineName].filter(station => this.foundStations.has(station)).length;
+                        const progressElement = header.querySelector('.line-progress');
+                        if (progressElement) {
+                            progressElement.textContent = `${foundInLine}/${this.lineData[lineName].length}`;
+                        }
                     }
-                }
+                });
             }
         });
     }
@@ -396,22 +401,19 @@ class MTRMemoryGame {
         
         this.foundStations.clear();
         
-        // Reset map stations
+        // Hide all stations on map again
         document.querySelectorAll('.station-marker.found').forEach(marker => {
             marker.classList.remove('found');
-            const label = marker.querySelector('.station-label');
-            if (label) {
-                label.classList.add('hidden');
-            }
-            const circle = marker.querySelector('circle');
-            if (circle) {
-                circle.setAttribute('r', '4');
-            }
         });
         
         // Reset station lists
         document.querySelectorAll('.station-item.found').forEach(item => {
             item.classList.remove('found');
+        });
+        
+        // Reset line completion
+        document.querySelectorAll('.line-group.completed').forEach(group => {
+            group.classList.remove('completed');
         });
         
         // Reset line progress
@@ -425,6 +427,8 @@ class MTRMemoryGame {
         this.stationInput.focus();
         
         document.title = 'Hong Kong MTR Memory Game';
+        
+        console.log('🔄 Game reset - all stations hidden again!');
     }
 }
 
@@ -473,5 +477,15 @@ window.mtrHelpers = {
         const game = window.mtrGame;
         console.log(`📊 Found: ${game.foundStations.size}/${game.totalStations}`);
         console.log('📍 Found stations:', Array.from(game.foundStations).sort());
+    },
+    
+    test: () => {
+        console.log('🧪 Testing station discovery...');
+        const game = window.mtrGame;
+        ['Central', 'TST', 'Airport'].forEach(station => {
+            setTimeout(() => {
+                game.foundStation(game.inputToStation[station.toLowerCase()]);
+            }, 500);
+        });
     }
 };
