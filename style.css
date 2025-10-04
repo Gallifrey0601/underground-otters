@@ -739,7 +739,7 @@ select.form-control {
 
 /* END PERPLEXITY DESIGN SYSTEM */
 ```css
-/* Clean Hong Kong MTR Memory Game - Simple and Working */
+/* Hong Kong MTR Memory Game - Clean London Metro Style */
 
 * {
     margin: 0;
@@ -755,154 +755,147 @@ body {
 }
 
 .game-container {
-    max-width: 1200px;
+    max-width: var(--container-xl);
     margin: 0 auto;
-    padding: var(--space-20);
+    padding: var(--space-16);
 }
 
-/* Header */
+/* Header - Clean and Modern */
 .header {
     text-align: center;
     background: var(--color-surface);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-base);
     padding: var(--space-20);
-    margin-bottom: var(--space-20);
-    box-shadow: var(--shadow-md);
+    margin-bottom: var(--space-16);
+    box-shadow: var(--shadow-sm);
 }
 
 .header h1 {
-    font-size: var(--font-size-3xl);
+    font-size: var(--font-size-2xl);
     color: var(--color-text);
-    margin-bottom: var(--space-16);
-    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--space-12);
+    font-weight: var(--font-weight-bold);
 }
 
 .progress-info {
     display: flex;
     justify-content: center;
-    gap: var(--space-32);
+    gap: var(--space-24);
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .percentage {
-    font-size: var(--font-size-4xl);
+    font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-bold);
     color: var(--color-primary);
 }
 
 .station-count {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-base);
     color: var(--color-text-secondary);
-    align-self: center;
+    font-weight: var(--font-weight-medium);
 }
 
-/* Input Section */
+/* Input Section - London Metro Style */
 .input-section {
     display: flex;
     justify-content: center;
-    gap: var(--space-16);
-    margin-bottom: var(--space-24);
+    gap: var(--space-12);
+    margin-bottom: var(--space-20);
     flex-wrap: wrap;
 }
 
 .station-input {
-    padding: var(--space-16) var(--space-20);
-    font-size: var(--font-size-lg);
-    border: 2px solid var(--color-primary);
-    border-radius: var(--radius-base);
+    padding: var(--space-12) var(--space-16);
+    font-size: var(--font-size-base);
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
     outline: none;
-    width: 300px;
-    transition: all var(--duration-normal) var(--ease-standard);
+    width: 280px;
     background: var(--color-surface);
-    color: var(--color-text);
+    transition: all var(--duration-fast) var(--ease-standard);
+    font-family: var(--font-family-base);
 }
 
 .station-input:focus {
-    border-color: var(--color-success);
-    box-shadow: 0 0 0 3px rgba(var(--color-success-rgb), 0.4);
-}
-
-.reset-btn {
-    padding: var(--space-16) var(--space-24);
-    background: var(--color-error);
-    color: var(--color-white);
-    border: none;
-    border-radius: var(--radius-base);
-    font-size: var(--font-size-base);
-    cursor: pointer;
-    font-weight: var(--font-weight-medium);
-    transition: background var(--duration-normal) var(--ease-standard);
-}
-
-.reset-btn:hover {
-    background: rgba(var(--color-error-rgb), 0.9);
-}
-
-.reset-btn:focus-visible {
-    outline: none;
+    border-color: var(--color-primary);
     box-shadow: var(--focus-ring);
 }
 
-/* Map Section */
+.reset-btn {
+    padding: var(--space-12) var(--space-20);
+    background: var(--color-error);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    font-weight: var(--font-weight-semibold);
+    transition: background var(--duration-fast) var(--ease-standard);
+    font-family: var(--font-family-base);
+}
+
+.reset-btn:hover {
+    background: var(--color-red-500);
+}
+
+.reset-btn:active {
+    transform: translateY(1px);
+}
+
+.reset-btn:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: 2px;
+}
+
+/* Map Section - London Metro Clean Style */
 .map-section {
     background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    padding: var(--space-20);
-    box-shadow: var(--shadow-md);
-    margin-bottom: var(--space-20);
+    border-radius: var(--radius-base);
+    padding: var(--space-16);
+    box-shadow: var(--shadow-sm);
 }
 
 .map-container {
     width: 100%;
-    overflow-x: auto;
-    background: var(--color-surface);
-    border-radius: var(--radius-base);
-    padding: var(--space-16);
+    overflow: hidden;
+    background: var(--color-background);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
 }
 
 .mtr-map {
     width: 100%;
     height: auto;
-    min-height: 500px;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    min-height: 450px;
+    display: block;
 }
 
-/* Station Markers - Everything starts hidden */
-.station-marker {
-    transition: all var(--duration-normal) var(--ease-standard);
-}
-
+/* Station Markers - Hidden by Default */
 .station-marker circle {
     transition: all var(--duration-normal) var(--ease-standard);
+    cursor: pointer;
 }
 
 .station-marker text {
     font-family: var(--font-family-base);
-    font-size: 10px;
-    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
     fill: var(--color-text);
     pointer-events: none;
+    text-anchor: middle;
 }
 
-/* When station is found - SHOW IT */
-.station-marker.found circle {
-    animation: stationReveal 0.6s var(--ease-standard);
-}
-
-.station-marker.found text {
-    font-weight: var(--font-weight-semibold);
-}
-
-/* Station reveal animation */
+/* Station Reveal Animation - Like London Metro */
 @keyframes stationReveal {
     0% {
         opacity: 0;
         transform: scale(0);
     }
-    50% {
+    60% {
         opacity: 1;
-        transform: scale(1.3);
+        transform: scale(1.4);
     }
     100% {
         opacity: 1;
@@ -910,124 +903,136 @@ body {
     }
 }
 
-/* Success Celebration */
+.station-marker circle[r="5"] {
+    animation: stationReveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Success Effects */
 .celebration {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(var(--color-success-rgb), 0.95);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    animation: celebrationShow 3s var(--ease-standard) forwards;
+    animation: fadeInOut 4s ease-in-out;
 }
 
-.celebration-content {
-    text-align: center;
-    color: var(--color-white);
-    font-size: var(--font-size-4xl);
-    font-weight: var(--font-weight-bold);
+@keyframes fadeInOut {
+    0%, 10% { opacity: 0; }
+    20%, 80% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
-@keyframes celebrationShow {
-    0%, 85% { opacity: 1; }
-    100% { opacity: 0; visibility: hidden; }
-}
-
-/* Mobile Portrait Responsive Design */
-@media (max-width: 480px) {
+/* Responsive Design */
+@media (max-width: 768px) {
     .game-container {
         padding: var(--space-12);
     }
     
-    .header {
-        padding: var(--space-16);
-        margin-bottom: var(--space-16);
-    }
-    
     .header h1 {
-        font-size: var(--font-size-2xl);
+        font-size: var(--font-size-xl);
     }
     
     .percentage {
-        font-size: var(--font-size-3xl);
+        font-size: var(--font-size-2xl);
     }
     
     .station-count {
+        font-size: var(--font-size-sm);
+    }
+    
+    .station-input {
+        width: 100%;
+        max-width: 320px;
         font-size: var(--font-size-base);
+    }
+    
+    .input-section {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .map-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .mtr-map {
+        min-width: 800px;
+        min-height: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: var(--space-10);
+    }
+    
+    .header {
+        padding: var(--space-16);
+    }
+    
+    .header h1 {
+        font-size: var(--font-size-lg);
+    }
+    
+    .percentage {
+        font-size: var(--font-size-xl);
     }
     
     .progress-info {
         gap: var(--space-16);
     }
     
-    .input-section {
-        gap: var(--space-12);
-        margin-bottom: var(--space-20);
-    }
-    
-    .station-input {
-        width: 100%;
-        max-width: none;
-        padding: var(--space-12) var(--space-16);
-        font-size: var(--font-size-base);
-    }
-    
-    .reset-btn {
-        width: 100%;
-        padding: var(--space-12) var(--space-16);
-    }
-    
     .map-section {
         padding: var(--space-12);
     }
     
-    .map-container {
-        overflow-x: scroll;
-        padding: var(--space-8);
-    }
-    
     .mtr-map {
-        min-width: 600px;
+        min-width: 700px;
         min-height: 300px;
     }
     
-    .celebration-content {
-        font-size: var(--font-size-3xl);
-        padding: var(--space-16);
+    .station-input {
+        padding: var(--space-10) var(--space-12);
+        font-size: var(--font-size-base);
+        max-width: 100%;
+    }
+    
+    .input-section {
+        gap: var(--space-8);
+        margin-bottom: var(--space-16);
+    }
+    
+    .reset-btn {
+        padding: var(--space-10) var(--space-16);
+        font-size: var(--font-size-sm);
     }
 }
 
-/* Tablet Responsive Design */
-@media (max-width: 768px) {
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .station-marker circle,
+    .celebration {
+        animation: none;
+    }
+    
+    .station-marker circle {
+        transition: opacity var(--duration-fast) var(--ease-standard);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .input-section,
+    .reset-btn,
+    .celebration {
+        display: none;
+    }
+    
     .game-container {
-        padding: var(--space-16);
+        max-width: none;
+        padding: 0;
     }
     
-    .header h1 {
-        font-size: var(--font-size-2xl);
-    }
-    
-    .percentage {
-        font-size: var(--font-size-3xl);
-    }
-    
-    .station-input {
-        width: 100%;
-        max-width: 400px;
-    }
-    
-    .map-container {
-        overflow-x: scroll;
-        padding: var(--space-10);
-    }
-    
-    .mtr-map {
-        min-width: 800px;
-        min-height: 400px;
+    .map-section {
+        box-shadow: none;
+        border: 1px solid var(--color-black);
     }
 }
 ```

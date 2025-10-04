@@ -8,7 +8,6 @@
 </head>
 <body>
     <div class="game-container">
-        <!-- Header -->
         <header class="header">
             <h1>Hong Kong MTR Memory Game</h1>
             <div class="progress-info">
@@ -17,7 +16,6 @@
             </div>
         </header>
 
-        <!-- Input Section -->
         <div class="input-section">
             <input 
                 type="text" 
@@ -30,13 +28,23 @@
             <button id="resetBtn" class="reset-btn">Reset</button>
         </div>
 
-        <!-- Interactive Map - JavaScript will populate ALL stations -->
+        <!-- ONLY INTERACTIVE MAP - NO STATION NAMES IN HTML -->
         <div class="map-section">
             <div class="map-container">
                 <svg id="mtrMap" class="mtr-map" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Clean background -->
-                    <rect width="1000" height="600" fill="white"/>
-                    <!-- JavaScript will create ALL stations and lines here -->
+                    <!-- Background -->
+                    <rect width="1000" height="600" fill="#f8f9fa"/>
+                    
+                    <!-- Hong Kong Island outline (simplified) -->
+                    <path d="M50 450 Q200 440 400 450 Q600 460 750 450" stroke="#e0e0e0" stroke-width="1" fill="none" opacity="0.3"/>
+                    
+                    <!-- Kowloon outline -->
+                    <path d="M200 300 Q400 290 600 300" stroke="#e0e0e0" stroke-width="1" fill="none" opacity="0.3"/>
+                    
+                    <!-- New Territories outline -->
+                    <path d="M100 100 Q300 80 600 100 Q800 110 900 100" stroke="#e0e0e0" stroke-width="1" fill="none" opacity="0.3"/>
+                    
+                    <!-- JavaScript will add ALL lines and stations here -->
                 </svg>
             </div>
         </div>
